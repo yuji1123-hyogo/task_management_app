@@ -1,0 +1,6 @@
+ja:
+  helpers:
+    submit:
+      task:
+        create: "タスクを作成する"
+        update: "タスクを更新する"

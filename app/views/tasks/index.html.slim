@@ -1,0 +1,26 @@
+h1 Tasks#index
+p Find me in app/views/tasks/index.html.slim
+
+.mt-4 
+  h1 タスク一覧
+
+  = link_to '新規作成', new_task_path, class: 'btn btn-success mb-3'
+
+  table.table.table-striped 
+    thead 
+      tr 
+        th = Task.human_attribute_name(:name)
+        th = Task.human_attribute_name(:name)
+        th 作成日
+        th 更新日
+        th 編集
+        th 削除
+      tbody 
+        - @tasks.each do |task|
+          tr 
+            td = task.name 
+            td = task.description 
+            td = l task.created_at, format: :long
+            td = l task.updated_at, format: :long
+            td = link_to '編集', edit_task_path(task), class: 'btn btn-primary'
+            td = link_to '削除', task, data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか？' }, class: 'btn btn-danger'

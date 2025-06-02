@@ -1,0 +1,24 @@
+doctype html
+html
+  head
+    title
+      | TaskManage
+    meta[name="viewport" content="width=device-width,initial-scale=1"]
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    = javascript_importmap_tags
+  body
+    h1.text-primary Bootstrap Test
+      
+    .alert.alert-success role="alert"
+      dartsass + Bootstrap が正しく読み込まれています！
+
+    .container
+      - flash.each do |key, message|
+        .mt-3
+          div class = "alert alert-#{key}"
+            = message     
+            button.btn-close type="button" data-bs-dismiss="alert" aria-label="閉じる"  
+
+    = yield
