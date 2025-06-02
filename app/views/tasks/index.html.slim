@@ -10,9 +10,10 @@ p Find me in app/views/tasks/index.html.slim
     thead 
       tr 
         th = Task.human_attribute_name(:name)
-        th = Task.human_attribute_name(:name)
+        th = Task.human_attribute_name(:description)
         th 作成日
         th 更新日
+        th 詳細
         th 編集
         th 削除
       tbody 
@@ -22,5 +23,6 @@ p Find me in app/views/tasks/index.html.slim
             td = task.description 
             td = l task.created_at, format: :long
             td = l task.updated_at, format: :long
+            td = link_to '詳細', task, class: 'btn btn-info'
             td = link_to '編集', edit_task_path(task), class: 'btn btn-primary'
             td = link_to '削除', task, data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか？' }, class: 'btn btn-danger'
