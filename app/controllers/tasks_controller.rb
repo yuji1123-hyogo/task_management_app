@@ -10,11 +10,11 @@ class TasksController < ApplicationController
     task = Task.new(task_params)
     if task.save
       flash[:success] = "タスクを作成しました"
-      redirect_to tasks_path
+      redirect_to tasks_path status: :see_other
     else
       @task = task
-      flash.now[:alert] = "タスクの作成に失敗しました"
-      render :new
+      flash.now[:danger] = "タスクの作成に失敗しました"
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -24,11 +24,11 @@ class TasksController < ApplicationController
   def update
     @task = Task.find(params[:id])
     if @task.update(task_params)
-      flash[:success] = "タスクの更新に失敗しました"
+      flash[:success] = "タスクの更新に成功しました"
       redirect_to tasks_path
     else
-      flash.now[:alert] = "タスクの更新に失敗しました"
-      render :edit
+      flash.now[:danger] = "タスクの更新に失敗しました"
+      render :edit, status: :unprocessable_entity
     end
   end
 
