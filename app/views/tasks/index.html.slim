@@ -5,7 +5,7 @@ p Find me in app/views/tasks/index.html.slim
   h1 タスク一覧
 
   = link_to '新規作成', new_task_path, class: 'btn btn-success mb-3'
-  = link_to 'ユーザー一覧', admin_users_path, class: 'btn btn-primary'
+  = link_to 'ユーザー一覧', current_user.admin? ? admin_users_path : members_index_path , class: 'btn btn-primary'
 
   table.table.table-striped 
     thead 

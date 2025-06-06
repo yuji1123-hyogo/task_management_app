@@ -1,18 +1,22 @@
 .container.mt-4 
-  h1 ユーザー一覧
+  h1 ユーザー一覧(管理者用)
 
-  = link_to '新規作成', new_admin_user_path, class: 'btn btn-success mb3'
   = link_to 'タスク一覧', tasks_path, class: 'btn btn-primary'
-
+  = link_to 'ユーザー作成', new_admin_user_path, class: 'btn btn-primary'
+  
   table.table.table-striped.table-hover
     thead 
       tr 
         th 名前
         th メールアドレス
-        th 操作
+        th 役職
+        th 削除
+        th 編集
     tbody 
       - @users.each do |user|
         tr 
           td = user.name
           td = user.email 
-          td 
+          td = user.role_i18n
+          td = link_to '削除', admin_user_path(user), data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか？' }, class: 'btn btn-danger' 
+          td = link_to '編集', edit_admin_user_path(user), class:'btn btn-primary'

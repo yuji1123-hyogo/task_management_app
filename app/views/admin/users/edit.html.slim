@@ -1,9 +1,8 @@
 .container
   = link_to 'ユーザー一覧', admin_users_path, class: 'btn btn-primary'
-
   .card.shadow-sm 
     .card-header.bg-primary.text-white 
-      h2 新規ユーザー作成(管理者用)
+      h2 ユーザー編集(管理者用)
      
     .carg-body.container
       = form_with model: [:admin,@user], local: true do |f|
@@ -47,7 +46,7 @@
 
         .mb-3 
           = f.label :role, class: 'form-label'
-          = f.select :role, User.roles_i18n.invert
+          = f.select :role, User.roles.keys.map.with_index { |k, i| [t("enum.user.role.#{k}"), i] }, { include_blank: "選択してください" }, class: 'form-select', required: true
 
   
         .text-end 

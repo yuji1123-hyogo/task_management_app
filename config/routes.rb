@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
-  namespace :admin do
-    get 'users/new'
-  end
+  get 'members/index'
+  devise_for :users
   root to: "tasks#index"
   resources :tasks
 

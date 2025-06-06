@@ -10,15 +10,37 @@ html
     = javascript_importmap_tags
   body
     h1.text-primary Bootstrap Test
-      
+    - if user_signed_in?
+      = link_to 'プロフィール編集', edit_user_registration_path, class: 'btn btn-success mb-3'
+
     .alert.alert-success role="alert"
       dartsass + Bootstrap が正しく読み込まれています！
 
     .container
       - flash.each do |key, message|
-        .mt-3
-          div class = "alert alert-#{key}"
-            = message     
-            button.btn-close type="button" data-bs-dismiss="alert" aria-label="閉じる"  
+        - base_class = case key.to_sym
+        - when :notice then "alert-success"
+        - when :alert  then "alert-danger"
+        - when :success then "alert-success"
+        - when :info then "alert-info"
+        - when :warning then "alert-warning"
+        - else "alert-secondary"
+        .alert class="alert #{base_class} alert-dismissible fade show" role="alert"
+          = message
+          button.btn-close type="button" data-bs-dismiss="alert" aria-label="Close"
 
     = yield
+
+    ul.navbar-nav.ms-auto
+      - if user_signed_in?
+        li.nav-item
+          span.nav-link
+            | こんにちは、
+            b.text-primary #{current_user.name} さん
+        li.nav-item
+          = link_to 'ログアウト', destroy_user_session_path,data: { turbo_method: :delete}, class: 'nav-link text-danger'
+      - else
+        li.nav-item
+          = link_to 'ログイン', new_user_session_path, class: 'btn btn-primary'
+        li.nav-item
+          = link_to 'サインアップ', new_user_registration_path, class: 'btn btn-primary'

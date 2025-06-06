@@ -4,3 +4,4 @@ ja:
       user:
         name: ユーザー名
         email: メールアドレス
+        role: 役職

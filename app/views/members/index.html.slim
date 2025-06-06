@@ -1,0 +1,15 @@
+.container.mt-4 
+  h1 ユーザー一覧
+
+  = link_to 'タスク一覧', tasks_path, class: 'btn btn-primary'
+
+  table.table.table-striped.table-hover
+    thead 
+      tr 
+        th 名前
+        th 役職
+    tbody 
+      - @users.each do |user|
+        tr 
+          td = user.name
+          td = user.role_i18n
