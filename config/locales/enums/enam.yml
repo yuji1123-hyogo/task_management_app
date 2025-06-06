@@ -1,0 +1,6 @@
+ja:
+  enums:
+    user:
+      role:
+        member: "参加者"
+        admin: "管理者"

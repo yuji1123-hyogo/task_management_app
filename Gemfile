@@ -77,3 +77,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "devise", "~> 4.9"
+
+gem "enum_help", "~> 0.0.19"
