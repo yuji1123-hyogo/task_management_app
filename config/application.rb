@@ -41,6 +41,7 @@ module TaskManage
       g.controller_specs false    # controllerスペックを生成しない（RSpec用）
       g.model_specs false         # modelスペックを生成しない（RSpec用）
       g.test_framework nil        # そもそも test ディレクトリを生成しない
+      g.skip_routes true          # ルーティングを生成しない
     end
   end
 end

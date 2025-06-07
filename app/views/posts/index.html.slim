@@ -1,0 +1,29 @@
+.container.mt-4 
+  .d-flex.justify-content-between.align-items-center.mb-3 
+    h1.mb-0 投稿一覧
+    = link_to '新規投稿', new_post_path, class: 'btn btn-primary'
+
+  - if @posts.any?
+    table.table.table-striped 
+      thead 
+        tr 
+          th タイトル
+          th 本文
+          th 投稿者
+          th 操作
+      tbody 
+        - @posts.each do |post|
+          tr 
+            td = post.title 
+            td = truncate(post.body, length: 50)
+            td 
+              = post.user&.name || "匿名"
+              br/
+              small.text-muted = post.user&.email 
+            td
+              - if post.user == current_user
+                = link_to '削除', post_path(post),
+                    data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか？' },
+                    class: 'btn btn-sm btn-outline-danger me-2'
+  - else 
+    p.text-muted 投稿が未だありません
