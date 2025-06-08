@@ -22,6 +22,10 @@ p Find me in app/views/posts/new.html.slim
         .text-danger 
           - @post.errors.full_messages_for(:body).each do |message|
             = message 
+    
+    .mb-3 
+      = f.label :tag_names,'タグ(カンマ区切り)',class: 'form-label'
+      = text_field_tag :tag_names, @post.tags.pluck(:name).join(',')
 
     = f.submit '投稿する', class: 'btn btn-primary'
     = link_to '戻る', posts_path, class: 'btn btn-secondary ms-2'

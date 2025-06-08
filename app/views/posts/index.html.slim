@@ -30,3 +30,9 @@
                     class: 'btn btn-sm btn-outline-danger me-2'
   - else 
     p.text-muted 投稿がまだありません
+
+  h5 タグ一覧
+  ul.list-group
+    - @all_tags.each do |tag|
+      li.list-group-item
+        = link_to "##{tag.name}", tag_path(tag.name)

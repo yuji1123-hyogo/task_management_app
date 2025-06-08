@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
-  get 'members/index'
-  devise_for :users
   root to: "tasks#index"
+  get 'members/index'
+  get 'tags/:name', to: 'tags#show', as: :tag
+
+  devise_for :users
+
   resources :tasks
   resources :posts, shallow: true do
     resources :comments, only: [:create, :destroy]
   end
-
   namespace :admin do 
     resources :users
   end
