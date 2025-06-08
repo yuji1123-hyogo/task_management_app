@@ -1,0 +1,17 @@
+.container.mt-4
+  h1.mb-4.text-primary = "##{@tag.name} タグの投稿"
+
+  - if @posts.any?
+    .row
+      - @posts.each do |post|
+        .col-md-6.mb-4
+          .card.shadow-sm
+            .card-body
+              h5.card-title = link_to post.title, post_path(post), class: 'text-decoration-none'
+              p.card-text = truncate(post.body, length: 100)
+              p.text-muted
+                | 投稿者: 
+                = post.user.name
+  - else
+    .alert.alert-warning
+      | このタグにはまだ投稿がありません。
