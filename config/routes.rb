@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   devise_for :users
   root to: "tasks#index"
   resources :tasks
-  resources :posts
+  resources :posts, shallow: true do
+    resources :comments, only: [:create, :destroy]
+  end
 
   namespace :admin do 
     resources :users
