@@ -10,7 +10,8 @@
           th タイトル
           th 本文
           th 投稿者
-          th 操作
+          th 一覧
+          th 削除
       tbody 
         - @posts.each do |post|
           tr 
@@ -20,10 +21,12 @@
               = post.user&.name || "匿名"
               br/
               small.text-muted = post.user&.email 
+            td 
+              = link_to '詳細', post
             td
               - if post.user == current_user
                 = link_to '削除', post_path(post),
                     data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか？' },
                     class: 'btn btn-sm btn-outline-danger me-2'
   - else 
-    p.text-muted 投稿が未だありません
+    p.text-muted 投稿がまだありません

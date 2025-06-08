@@ -5,7 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :posts, dependent: :destroy
-  
+  has_many :comments, dependent: :destroy
+
   enum role: { member: 0, admin: 1 } 
   validates :role, presence: true
   validates :name, presence: true

@@ -27,6 +27,12 @@ class PostsController < ApplicationController
     redirect_to posts_path
   end
 
+  def show
+    @post = Post.includes(:user, comments: :user).find(params[:id])
+    @comments = @post.comments.order(created_at: :asc)
+    @comment = Comment.new
+  end
+
   private
 
   def post_params
