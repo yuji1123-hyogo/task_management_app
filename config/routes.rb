@@ -5,6 +5,9 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  resources :events do
+    resources :tickets, only: [:create, :destroy]
+  end
   resources :tasks
   resources :posts, shallow: true do
     resources :comments, only: [:create, :destroy]

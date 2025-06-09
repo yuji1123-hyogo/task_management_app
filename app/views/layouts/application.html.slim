@@ -13,6 +13,7 @@ html
     - if user_signed_in?
       = link_to 'プロフィール編集', edit_user_registration_path, class: 'btn btn-success mb-3 mr-3'
       = link_to '投稿一覧', posts_path, class: 'btn btn-success mb-3'
+      = link_to 'イベントを作る', new_event_path, class: "btn btn-success mb-3"
 
     .alert.alert-success role="alert"
       dartsass + Bootstrap が正しく読み込まれています！

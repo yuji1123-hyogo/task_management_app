@@ -1,0 +1,21 @@
+.container.mt-5
+  .d-flex.justify-content-between.align-items-center.mb-4
+    h2 イベント一覧
+    = link_to '新規イベント作成', new_event_path, class: 'btn btn-primary'
+
+  - if @events.any?
+    .row.row-cols-1.row-cols-md-2.g-4
+      - @events.each do |event|
+        .col
+          .card.h-100.shadow-sm
+            .card-body
+              h5.card-title = event.name
+              p.card-text.text-muted
+                | 開催場所：#{event.place}
+                br/
+                | 開始：#{event.start_at.strftime('%Y/%m/%d %H:%M')}
+                br/
+                | 終了：#{event.end_at.strftime('%Y/%m/%d %H:%M')}
+              = link_to '詳細を見る', event_path(event), class: 'btn btn-outline-primary mt-2'
+  - else
+    .alert.alert-info イベントがまだ登録されていません。

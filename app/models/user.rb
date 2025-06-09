@@ -6,6 +6,9 @@ class User < ApplicationRecord
 
   has_many :posts, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :created_events, class_name: 'Event', foreign_key: 'owner_id', dependent: :destroy
+  has_many :tickets, dependent: :destroy
+  has_many :participated_events, through: :tickets, source: :event
 
   enum role: { member: 0, admin: 1 } 
   validates :role, presence: true
