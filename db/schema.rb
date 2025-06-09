@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_08_153826) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_09_154603) do
   create_table "comments", force: :cascade do |t|
     t.text "content"
     t.integer "user_id", null: false
@@ -19,6 +19,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_08_153826) do
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.integer "owner_id"
+    t.string "name"
+    t.string "place"
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_events_on_owner_id"
   end
 
   create_table "post_tags", force: :cascade do |t|
@@ -54,6 +66,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_08_153826) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "tickets", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "event_id", null: false
+    t.string "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id", "user_id"], name: "index_tickets_on_event_id_and_user_id", unique: true
+    t.index ["event_id"], name: "index_tickets_on_event_id"
+    t.index ["user_id"], name: "index_tickets_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -70,7 +93,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_08_153826) do
 
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "events", "users", column: "owner_id"
   add_foreign_key "post_tags", "posts"
   add_foreign_key "post_tags", "tags"
   add_foreign_key "posts", "users"
+  add_foreign_key "tickets", "events"
 end

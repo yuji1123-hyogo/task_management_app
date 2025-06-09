@@ -1,0 +1,60 @@
+.container.mt-5
+  .card.shadow-lg
+    .card-body
+      h2.card-title.mb-3 = @event.name
+      ul.list-unstyled
+        li.mb-1
+          strong 開催場所：
+          | #{@event.place}
+        li.mb-1
+          strong 開始時間：
+          | #{@event.start_at.strftime('%Y/%m/%d %H:%M')}
+        li.mb-1
+          strong 終了時間：
+          | #{@event.end_at.strftime('%Y/%m/%d %H:%M')}
+      hr
+      h5 内容
+      p = simple_format(@event.content)
+
+
+      - if @ticket
+        = link_to "参加をキャンセルする", event_ticket_path(@event,@ticket), data: { turbo_method: :delete, turbo_confirm: "本当にキャンセルしますか？"} 
+      - else 
+        = form_with  model:@event.tickets.build, url: event_tickets_path(@event), method: :post, local: true  do |f|
+          .mb-3
+           .form-group
+              = f.label :comment, "参加コメント"
+              = f.text_area :comment, class: "form-control", rows: 3
+          = f.submit '送信', class: 'btn btn-primary'
+         
+
+
+
+        .mt-4.d-flex.justify-content-between
+            = link_to 'イベント編集', edit_event_path(@event), class: 'btn btn-outline-warning'
+            = link_to '削除', event_path(@event), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-outline-danger'
+            = link_to '一覧に戻る', events_path, class: 'btn btn-secondary'
+
+.container.mt-4
+  .card
+    .card-header.bg-primary.text-white
+      h2.mb-0 = @event.name
+
+    .card-body
+      h5 主催者
+      .d-flex.align-items-center.mb-3
+        .fw-bold = @event.owner.name
+        small.text-muted.ms-2 = @event.owner.email
+
+      hr
+
+      h5 参加者一覧
+      - if @event.participants.any?
+        ul.list-group
+          - @event.participants.each do |user|
+            li.list-group-item.d-flex.justify-content-between.align-items-center
+              span
+                = user.name
+              small.text-muted = user.email
+      - else
+        p.text-muted 参加者がまだいません。
