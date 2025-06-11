@@ -81,3 +81,5 @@ end
 gem "devise", "~> 4.9"
 
 gem "enum_help", "~> 0.0.19"
+
+gem "ransack", "~> 4.3"

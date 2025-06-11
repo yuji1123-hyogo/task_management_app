@@ -23,19 +23,22 @@ class EventsController < ApplicationController
   end
 
   def index 
-    @events = Event.all
-  end
-
-  def destroy
-    ticket = current_user.tickets.find_by!(event_id: params[:event_id])
-    ticket.destroy!
-    flash[:danger] = "イベントへの参加をキャンセルしました"
-    redirect_to event_path(params[:event_id])
+    @q = Event.includes(:owner).ransack(params[:q])
+    @events = @q.result(distinct: true)
+    @events = apply_custom_filters(@events)
   end
 
   private
 
   def event_params
     params.require(:event).permit(:name,:place,:start_at,:end_at,:content)
+  end
+
+  def apply_custom_filters(events_scope)
+    # 参加状況での絞り込み
+    if params[:participation_status].present?
+      events_scope = events_scope.by_participation_status(current_user, params[:participation_status])
+    end
+    events_scope.distinct
   end
 end
