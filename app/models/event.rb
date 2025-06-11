@@ -9,7 +9,29 @@ class Event < ApplicationRecord
   validates  :start_at, presence: true
   validates  :end_at, presence: true
   validate  :start_at_should_be_before_end_at
-  
+
+  scope :by_participation_status, ->(user, status) {
+    case status
+    when 'participated'
+      participated_by_user(user)
+    when 'not_participated'
+      not_participated_by_user(user)
+    else
+      all
+    end
+  }
+
+
+  # 効率的なサブクエリを使った参加済みイベント
+  scope :participated_by_user, ->(user) {
+    joins(:participants).where(participants: { id: user.id})
+  }
+
+  # 未参加イベント（効率的なサブクエリ版）
+  scope :not_participated_by_user, ->(user) {
+    where.not(id: user.participated_events.pluck(:id))
+  }
+
   private
 
   def start_at_should_be_before_end_at
@@ -20,4 +42,20 @@ class Event < ApplicationRecord
       errors.add(:start_at, "は終了時間よりも前に設定してください")
     end
   end
+
+  # Ransack で検索可能にしたいカラムを明示
+  def self.ransackable_attributes(auth_object = nil)
+    %w[name content place start_at end_at owner_id owner_id created_at]
+  end
+
+  # 関連モデル(owner)を検索条件に使う場合はこれも必要
+  def self.ransackable_associations(auth_object = nil)
+    %w[owner]
+  end
+
+  # Ransackで使用可能にする
+  def self.ransackable_scopes(auth_object = nil)
+    %w[by_participation_status]
+  end
+
 end
