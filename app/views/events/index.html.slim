@@ -63,5 +63,8 @@
                 br/
                 | 終了：#{event.end_at.strftime('%Y/%m/%d %H:%M')}
               = link_to '詳細を見る', event_path(event), class: 'btn btn-outline-primary mt-2'
+
+    = paginate @events
+
   - else
     .alert.alert-info イベントがまだ登録されていません。

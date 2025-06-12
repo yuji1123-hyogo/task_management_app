@@ -25,7 +25,7 @@ class EventsController < ApplicationController
   def index 
     @q = Event.includes(:owner).ransack(params[:q])
     @events = @q.result(distinct: true)
-    @events = apply_custom_filters(@events)
+    @events = apply_custom_filters(@events).page(params[:page]).per(5)
   end
 
   private

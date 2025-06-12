@@ -59,6 +59,7 @@ group :development, :test do
   # gem "debug", platforms: %i[ mri windows ]
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem  'rspec-rails'
 end
 
 group :development do
@@ -83,3 +84,7 @@ gem "devise", "~> 4.9"
 gem "enum_help", "~> 0.0.19"
 
 gem "ransack", "~> 4.3"
+
+gem "kaminari", "~> 1.2"
+
+gem "factory_bot_rails", "~> 6.4"
