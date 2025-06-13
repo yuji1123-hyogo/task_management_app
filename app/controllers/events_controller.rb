@@ -11,9 +11,8 @@ class EventsController < ApplicationController
       flash[:success] = "イベントを作成しました"
       redirect_to event_path(@event)
     else
-      binding.pry
       flash[:danger] = "イベントの作成に失敗しました"
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 

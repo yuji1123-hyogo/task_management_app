@@ -1,5 +1,5 @@
 class Admin::UsersController < ApplicationController
-  # before_action :ensure_admin!, except: [:new, :create, :index]
+  before_action :ensure_admin!, only:[:new, :create, :destroy]
   before_action :authenticate_user!
   
   def index
