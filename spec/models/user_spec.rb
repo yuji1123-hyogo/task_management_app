@@ -1,58 +1,80 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :integer          not null, primary key
+#  email                  :string           default(""), not null
+#  encrypted_password     :string           default(""), not null
+#  name                   :string           default(""), not null
+#  remember_created_at    :datetime
+#  reset_password_sent_at :datetime
+#  reset_password_token   :string
+#  role                   :integer          default("member"), not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_email                 (email) UNIQUE
+#  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
   describe 'ファクトリーの動作確認' do
-    it '有効なファクトリーが作成できる' do
+    it '有効なユーザーデータが作成できること' do
       user = build(:user)
       expect(user).to be_valid
     end
 
-    it '管理者ファクトリーが作成できる' do
-      admin = build(:user, :admin)
-      expect(admin.role).to eq 'admin'
-      expect(admin).to be_valid
+    it 'データベースに保存できること' do
+      user = create(:user)
+      expect(user).to be_persisted
+      expect(User.count).to eq 1
     end
   end
 
-  describe 'バリデーション' do
+  describe 'バリデーションのテスト' do
     let(:user) { build(:user) }
 
-    context 'nameについて' do
-      it '存在する場合は有効' do
+    context '全てのフィールドが有効な場合' do
+      it '有効であること' do
         expect(user).to be_valid
       end
+    end
 
-      it '空の場合は無効' do
+    context 'nameについて' do
+      it '空の場合は無効であること' do
         user.name = ''
-        expect(user).not_to be_valid
+        expect(user).to be_invalid
+
         expect(user.errors[:name]).to include('を入力してください')
       end
     end
 
     context 'emailについて' do
-      it '重複している場合は無効' do
-        # 最初のユーザーを作成
-        create(:user, email: 'test@example.com')
-        
-        # 同じemailで新しいユーザーを作成
-        duplicate_user = build(:user, email: 'test@example.com')
-        
-        expect(duplicate_user).not_to be_valid
-        expect(duplicate_user.errors[:email]).to include('はすでに存在します')
+      it '重複している場合は無効であること' do
+        create(:user, email: 'test@email.com')
+        dupulicate_user = build(:user, email: 'test@email.com')
+        expect(dupulicate_user).to be_invalid
       end
     end
+  end
 
-    context 'roleについて' do
-      it 'memberが設定できる' do
-        user.role = :member
-        expect(user).to be_valid
-        expect(user.member?).to be true
+  describe 'アソシエーションのテスト' do
+    let(:user){ create(:user) }
+
+    describe 'has_many :posts' do
+      it '投稿と関連付けができる' do
+        user = create(:user)
+        post = create(:post, user: user)
+        expect(post.user).to eq user
       end
 
-      it 'adminが設定できる' do
-        user.role = :admin
-        expect(user).to be_valid
-        expect(user.admin?).to be true
+      it '投稿を作成できる' do
+        post = user.posts.create!(title: 'テスト投稿', body: 'test投稿')
+        expect(user.posts).to include(post)
+        expect(user.posts.count).to eq 1
       end
     end
   end

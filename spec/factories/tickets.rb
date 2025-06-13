@@ -19,10 +19,9 @@
 #
 #  event_id  (event_id => events.id)
 #
-class Ticket < ApplicationRecord
-  validates :user_id, uniqueness: { scope: :event_id, message: 'このユーザーはすでにこのイベントに登録済みです' }
-  belongs_to :user, optional: true
-  belongs_to :event
-
-  validates :comment, length: { maximum: 30 }, allow_blank: true
+FactoryBot.define do
+  factory :ticket do
+    user
+    event
+  end
 end

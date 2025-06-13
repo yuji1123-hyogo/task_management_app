@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: events
+#
+#  id         :integer          not null, primary key
+#  content    :text
+#  end_at     :datetime
+#  name       :string
+#  place      :string
+#  start_at   :datetime
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  owner_id   :integer
+#
+# Indexes
+#
+#  index_events_on_owner_id  (owner_id)
+#
+# Foreign Keys
+#
+#  owner_id  (owner_id => users.id)
+#
 class Event < ApplicationRecord
   has_many   :tickets, dependent: :destroy
   has_many :participants, through: :tickets, source: :user
