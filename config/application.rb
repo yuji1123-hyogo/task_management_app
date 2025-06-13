@@ -35,12 +35,12 @@ module TaskManage
     config.generators do |g|
       g.helper false              # helper ファイルを生成しない
       g.assets false              # CSS/JSファイルを生成しない
-      g.view_specs false          # viewスペックを生成しない（RSpec用）
-      g.helper_specs false        # helperスペックを生成しない（RSpec用）
-      g.routing_specs false       # routingスペックを生成しない（RSpec用）
-      g.controller_specs false    # controllerスペックを生成しない（RSpec用）
-      g.model_specs false         # modelスペックを生成しない（RSpec用）
-      g.test_framework nil        # そもそも test ディレクトリを生成しない
+      g.test_framework :rspec,
+                        fixtures: true,
+                        view_specs: false,
+                        helper_specs: false,
+                        routing_specs: false
+      g.fixture_replacement :factory_bot, dir: 'spec/factories'
       g.skip_routes true          # ルーティングを生成しない
     end
   end

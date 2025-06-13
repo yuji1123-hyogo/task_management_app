@@ -18,25 +18,12 @@
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
-class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
-
-  has_many :posts, dependent: :destroy
-  has_many :comments, dependent: :destroy
-  has_many :created_events, class_name: 'Event', foreign_key: 'owner_id', dependent: :destroy
-  has_many :tickets, dependent: :destroy
-  has_many :participated_events, through: :tickets, source: :event
-
-  enum role: { member: 0, admin: 1 } 
-  validates :role, presence: true
-  validates :name, presence: true
-
-  private 
-  
-  def self.ransackable_attributes(auth_object = nil)
-    %w[name email]
+FactoryBot.define do
+  factory :user do
+    name { "テスト太郎" }
+    sequence(:email) { |n| "user#{n}@example.com" }
+    password { "password123" }
+    password_confirmation { "password123" }
+    role { :member }  # enumの初期値
   end
 end
