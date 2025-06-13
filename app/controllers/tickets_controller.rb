@@ -14,7 +14,6 @@ class TicketsController < ApplicationController
     end
 
     if @ticket.save
-      
       flash[:notice] = "イベント#{event.name}に参加しました"
       redirect_to event
     end
