@@ -77,5 +77,69 @@ RSpec.describe User, type: :model do
         expect(user.posts.count).to eq 1
       end
     end
+
+    describe 'has_many :favorites' do
+      it '関連が正しく設定されている' do
+        association = User.reflect_on_association(:favorites)
+        expect(association.macro).to eq(:has_many)
+      end
+
+      it '投稿をお気に入りできる' do
+        post = create(:post)
+        user.favorite_posts << post
+        expect(user.favorite_posts).to include(post)
+      end
+    end
+  end
+
+  describe 'メソッドのテスト' do
+    describe '#favorite_post?' do
+      it 'そのポストをお気に入り登録していた場合 trueを返す' do
+        user = create(:user)
+        post = create(:post)
+        user.favorite_posts << post
+        expect(user.favorite_post?(post)).to be true
+      end
+
+      it 'そのポストをお気に入り登録していなかった場合falseを返す' do
+        user = create(:user)
+        post = create(:post)
+        expect(user.favorite_post?(post)).to be false
+      end
+    end
+
+
+    describe '#toggle_favorite' do
+      let(:user){ create(:user) }
+      let(:post1){ create(:post) }
+      it 'adds favorite if not already favorited' do
+        expect {
+          user.toggle_favorite(post1)
+        }.to change { user.favorites.count }.by(1)
+        
+        expect(user.favorite_post?(post1)).to be true
+      end
+
+      it 'removes favorite if already favorited' do
+        user.favorites.create!(post: post1)
+        
+        expect {
+          user.toggle_favorite(post1)
+        }.to change { user.favorites.count }.by(-1)
+        
+        expect(user.favorite_post?(post1)).to be false
+      end
+
+      it 'returns true when adding favorite' do
+        result = user.toggle_favorite(post1)
+        expect(result).to be true
+      end
+
+      it 'returns false when removing favorite' do
+        user.favorites.create!(post: post1)
+        result = user.toggle_favorite(post1)
+        expect(result).to be false
+      end
+    end
   end
 end

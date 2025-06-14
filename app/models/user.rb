@@ -29,11 +29,28 @@ class User < ApplicationRecord
   has_many :created_events, class_name: 'Event', foreign_key: 'owner_id', dependent: :destroy
   has_many :tickets, dependent: :destroy
   has_many :participated_events, through: :tickets, source: :event
+  has_many :favorites, dependent: :destroy
+  has_many :favorite_posts, through: :favorites, source: :post
 
   enum role: { member: 0, admin: 1 } 
   validates :role, presence: true
   validates :name, presence: true
 
+  def favorite_post?(post)
+    favorites.exists?(post: post)
+  end
+  
+  def toggle_favorite(post)
+    favorite = favorites.find_by(post: post)
+    if favorite
+      favorite.destroy
+      false
+    else
+      favorites.create!(post: post)
+      true
+    end
+  end
+  
   private 
   
   def self.ransackable_attributes(auth_object = nil)
