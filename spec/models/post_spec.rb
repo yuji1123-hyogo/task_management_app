@@ -68,5 +68,38 @@ RSpec.describe Post, type: :model do
         expect(post).to be_invalid
       end
     end
+
+    describe 'has_many :favorites' do
+      it '関連が正しく定義されている' do
+        association = Post.reflect_on_association(:favorites)
+        expect(association.macro).to eq(:has_many)
+        expect(association.options[:dependent]).to eq(:destroy)
+      end
+
+      it 'ユーザーと紐づけられる' do
+        user = create(:user)
+        post = create(:post)
+        post.favorites.create(user: user)
+      end
+    end
+
+    describe 'has_many :favorites_user' do
+      it '関連が正しく定義されている' do
+        association = Post.reflect_on_association(:favorite_users)
+        expect(association.macro).to eq(:has_many)
+        expect(association.options[:through]).to eq(:favorites)
+      end
+    end
+  end
+
+  describe 'メソッドのテスト' do
+    describe '#favorites_count' do
+      it 'お気に入り登録しているユーザー数を返す' do
+        post = create(:post)
+        user = create(:user)
+        post.favorites.create(post: post, user:user)
+        expect(post.favorites_count).to eq(1)
+      end
+    end
   end
 end
