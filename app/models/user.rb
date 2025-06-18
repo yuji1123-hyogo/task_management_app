@@ -31,6 +31,12 @@ class User < ApplicationRecord
   has_many :participated_events, through: :tickets, source: :event
   has_many :favorites, dependent: :destroy
   has_many :favorite_posts, through: :favorites, source: :post
+  has_many :articles, dependent: :destroy
+  has_many :notifications, dependent: :destroy
+
+
+
+
 
   enum role: { member: 0, admin: 1 } 
   validates :role, presence: true
