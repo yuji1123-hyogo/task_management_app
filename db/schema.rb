@@ -10,7 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_13_222449) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_18_053154) do
+  create_table "authors", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "bio"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_authors_on_name"
+  end
+
+  create_table "books", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "isbn", null: false
+    t.date "published_at"
+    t.integer "author_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_books_on_author_id"
+    t.index ["isbn"], name: "index_books_on_isbn", unique: true
+    t.index ["title"], name: "index_books_on_title"
+  end
+
   create_table "comments", force: :cascade do |t|
     t.text "content"
     t.integer "user_id", null: false
@@ -41,6 +61,27 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_13_222449) do
     t.index ["post_id"], name: "index_favorites_on_post_id"
     t.index ["user_id", "post_id"], name: "index_favorites_on_user_id_and_post_id", unique: true
     t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
+
+  create_table "loans", force: :cascade do |t|
+    t.integer "book_id", null: false
+    t.integer "member_id", null: false
+    t.datetime "borrowed_at", null: false
+    t.datetime "returned_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id", "member_id", "returned_at"], name: "index_loans_on_book_member_returned"
+    t.index ["book_id"], name: "index_loans_on_book_id"
+    t.index ["member_id"], name: "index_loans_on_member_id"
+  end
+
+  create_table "members", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_members_on_email", unique: true
   end
 
   create_table "post_tags", force: :cascade do |t|
@@ -101,11 +142,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_13_222449) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "books", "authors"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
   add_foreign_key "events", "users", column: "owner_id"
   add_foreign_key "favorites", "posts"
   add_foreign_key "favorites", "users"
+  add_foreign_key "loans", "books"
+  add_foreign_key "loans", "members"
   add_foreign_key "post_tags", "posts"
   add_foreign_key "post_tags", "tags"
   add_foreign_key "posts", "users"
